@@ -5,7 +5,7 @@
     <title>Demo</title>
 
     <style>
-        body{
+        body {
             display: grid;
             place-items: center;
             height: 100vh;
@@ -15,18 +15,21 @@
     </style>
 </head>
 <body>
-<!--  Define Variables  -->
+    <?php
+        $name = "Dark Matter";
+        $read = true;
+
+        if ($read) {
+            $message = "You have read $name";
+        } else {
+            $message = "You have NOT read $name";
+        }
+    ?>
 
     <h1>
-        <?php
-            $greeting = "Hello";
-//            echo $greeting . " " . "Everybody!";
-            echo "$greeting Everybody!";
-        ?>
+        <!--        --><?php //echo $message;?>
+        <?= $message ?>
     </h1>
-
-
-
 
 
 </body>
