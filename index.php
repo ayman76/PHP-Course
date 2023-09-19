@@ -2,15 +2,11 @@
 
 require 'functions.php';
 require 'Database.php';
-//require 'router.php';
+require 'router.php';
 
 //Connect to our MySQL database
 
 
-$config = require 'config.php';
-
-
-$db = new Database($config['database']) ;
 
 $id = $_GET['id'];
 
