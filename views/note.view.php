@@ -10,7 +10,7 @@
                 Go Back...
             </a>
         </p>
-        <p><?= $note['title'] ?></p>
+        <p><?= htmlspecialchars($note['body']) ?></p>
     </div>
 </main>
 
