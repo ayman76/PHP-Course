@@ -2,15 +2,26 @@
 
 use Core\Database;
 
-$config = require  base_path('config.php');
+$config = require base_path('config.php');
 $db = new Database($config['database']);
 $currentUserId = 4;
 
 $note = $db->query("select * from notes where id = :id", ['id' => $_GET['id']])->findOrFail();
-
 authorize($note['user_id'] === $currentUserId);
 
-view('\notes\show.view.php', [
-    'heading' => 'Note',
-    'note' => $note
-]);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $db->query('delete from notes where id = :id', [
+        'id' => $_POST['id'],
+    ]);
+
+    header('location: /notes');
+    exit();
+
+} else {
+
+    view('\notes\show.view.php', [
+        'heading' => 'Note',
+        'note' => $note
+    ]);
+}
