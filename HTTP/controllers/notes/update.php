@@ -21,7 +21,7 @@ if (!Validator::string($_POST['body'], 1, 1000)) {
 
 // if no validation errors, update the record in the notes database table.
 if (count($errors)) {
-    return view('notes/edit.view.php', [
+    view('notes/edit.view.php', [
         'heading' => 'Edit Note',
         'errors' => $errors,
         'note' => $note
