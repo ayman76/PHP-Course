@@ -1,52 +1,69 @@
 <?php
 
 namespace Core;
+
+use Core\Middleware\Auth;
+use Core\Middleware\Guest;
+use Core\Middleware\Middleware;
+use Exception;
+
 class Router
 {
     protected $routes = [];
 
-    public function add($uri, $controller, $method)
+    public function add($uri, $controller, $method): Router
     {
         $this->routes[] = [
             'uri' => $uri,
             'controller' => $controller,
-            'method' => $method
+            'method' => $method,
+            'middleware' => null
         ];
+
+        return $this;
     }
 
-    public function get($uri, $controller)
+    public function get($uri, $controller): Router
     {
-        $this->add($uri, $controller, 'GET');
+        return $this->add($uri, $controller, 'GET');
+
     }
 
-    public function post($uri, $controller)
+    public function post($uri, $controller): Router
     {
-        $this->add($uri, $controller, 'POST');
+        return $this->add($uri, $controller, 'POST');
+
 
     }
 
-    public function delete($uri, $controller)
+    public function delete($uri, $controller): Router
     {
-        $this->add($uri, $controller, 'DELETE');
+        return $this->add($uri, $controller, 'DELETE');
 
     }
 
-    public function patch($uri, $controller)
+    public function patch($uri, $controller): Router
     {
-        $this->add($uri, $controller, 'PATCH');
+        return $this->add($uri, $controller, 'PATCH');
 
     }
 
-    public function put($uri, $controller)
+    public function only($key): Router
     {
-        $this->add($uri, $controller, 'PUT');
-
+        $this->routes[array_key_last($this->routes)]['middleware'] = $key;
+        return $this;
     }
 
+    /**
+     * @throws Exception
+     */
     public function route($uri, $method)
     {
         foreach ($this->routes as $route) {
             if ($uri === $route['uri'] && strtoupper($method) === $route['method']) {
+
+                Middleware::resolve($route['middleware']);
+
                 return require base_path($route['controller']);
             }
         }
@@ -58,7 +75,7 @@ class Router
     protected function abort($code = 404)
     {
         http_response_code($code);
-        require base_path("views/{$code}.php");
+        require base_path("views/$code.php");
 
         die();
     }
