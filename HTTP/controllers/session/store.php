@@ -6,18 +6,20 @@
 use Core\App;
 use Core\Database;
 use Core\Validator;
+use HTTP\forms\LoginForm;
 
 $email = $_POST['email'];
 $password = $_POST['password'];
 
 //validate inputs
-$errors = [];
-if (!Validator::email($email)) {
-    $errors['email'] = "Please provide valid email";
-}
+$form = new LoginForm();
 
-if (!Validator::string($password, 7, 255)) {
-    $errors['password'] = "Please provide password with at least 7 characters";
+if (!$form->validate($email, $password)) {
+    view('session/create.view.php', [
+        'email' => $email,
+        'password' => $password,
+        'errors' => $form->errors(),
+    ]);
 }
 
 //Check if email is found in database
