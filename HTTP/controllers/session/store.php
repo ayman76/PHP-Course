@@ -29,6 +29,9 @@ if ($form->validate($email, $password)) {
 }
 
 Session::flash('errors', $form->errors());
+Session::flash('old', [
+    'email' => $email,
+]);
 
 //if validation or credentials is false
 //redirect to login page with data and errors
