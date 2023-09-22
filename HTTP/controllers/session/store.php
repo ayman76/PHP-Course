@@ -6,6 +6,7 @@
 use Core\App;
 use Core\Authenticator;
 use Core\Database;
+use Core\Session;
 use Core\Validator;
 use HTTP\forms\LoginForm;
 
@@ -27,13 +28,17 @@ if ($form->validate($email, $password)) {
 
 }
 
+Session::flash('errors', $form->errors());
+
 //if validation or credentials is false
 //redirect to login page with data and errors
-view('session/create.view.php', [
-    'email' => $email,
-    'password' => $password,
-    'errors' => $form->errors(),
-]);
+redirect('/login');
+
+//view('session/create.view.php', [
+//    'email' => $email,
+//    'password' => $password,
+//    'errors' => $form->errors(),
+//]);
 
 
 
