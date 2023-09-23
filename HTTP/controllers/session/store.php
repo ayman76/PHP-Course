@@ -10,38 +10,29 @@ use Core\Session;
 use Core\Validator;
 use HTTP\forms\LoginForm;
 
-$email = $_POST['email'];
-$password = $_POST['password'];
+
+$attributes = [
+    'email' => $_POST['email'],
+    'password' => $_POST['password'],
+];
 
 //validate inputs
-$form = new LoginForm();
-// Check Validation of inputs
-if ($form->validate($email, $password)) {
-    //if Validation true
-    //Check the credentials of user
-    if ((new Authenticator())->attempt($email, $password)) {
-        redirect('/');
-    }
-    //if credentials is false
-    //add error to errors
-    $form->error("notFound", "No matching account found for that email address and password.");
+$form = LoginForm::validate($attributes);
+
+//if Validation true
+//Check the credentials of user
+
+$signedIn = (new Authenticator())->attempt($attributes['email'], $attributes['password']);
+
+//if Credentials not correct
+//it will throw an exception and return to login page
+if (!$signedIn) {
+    $form->error("notFound", "No matching account found for that email address and password.")->throw();
 
 }
 
-Session::flash('errors', $form->errors());
-Session::flash('old', [
-    'email' => $email,
-]);
-
-//if validation or credentials is false
-//redirect to login page with data and errors
-redirect('/login');
-
-//view('session/create.view.php', [
-//    'email' => $email,
-//    'password' => $password,
-//    'errors' => $form->errors(),
-//]);
+//if signed in it will redirect to Home page
+redirect('/');
 
 
 
