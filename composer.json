@@ -1,0 +1,16 @@
+{
+  "name": "pc/demo",
+  "authors": [
+    {
+      "name": "Ayman",
+      "email": "a.m_ayman9@outlook.com"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "Core\\": "Core/",
+      "HTTP\\": "HTTP/"
+    }
+  }
+}
